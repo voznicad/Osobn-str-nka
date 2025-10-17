@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="./assets/icons/favicon.png">
+  <link rel="apple-touch-icon" href="./assets/icons/favicon.png">
+  <title>David Voznica — Osobní stránka</title>
+  <meta name="description" content="Osobní stránka Davida Voznici ve stylu Apple iOS." />
+  <style>
+    :root{
+      --bg: #0b0c0f;
+      --card: rgba(255,255,255,0.08);
+      --text: #e9ecf1;
+      --muted: #a9b0ba;
+      --tint: #5ac8fa;
+      --ring: rgba(90,200,250,0.45);
+      --blur: saturate(180%) blur(12px);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 22px;
+    }
+    .light{
+      --bg: #f2f4f8;
+      --card: rgba(255,255,255,0.6);
+      --text: #0b0c0f;
+      --muted: #60656f;
+      --tint: #007aff;
+      --ring: rgba(0,122,255,0.35);
+      --shadow: 0 10px 28px rgba(0,0,0,0.10);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(0,122,255,0.25), transparent 60%),
+                  radial-gradient(900px 700px at -10% 100%, rgba(88,86,214,0.25), transparent 60%), var(--bg);
+      color: var(--text); transition: background .3s ease, color .3s ease;
+    }
+    .container{max-width:1080px;margin:0 auto;padding:24px}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.08), transparent); border-bottom: 1px solid rgba(255,255,255,0.08);}
+    .statusbar{display:flex; align-items:center; justify-content:space-between; padding:14px 24px}
+    .pill{display:inline-flex; align-items:center; gap:10px; background: var(--card);
+      border:1px solid rgba(255,255,255,0.10); border-radius:999px; padding:10px 14px; box-shadow: var(--shadow);
+      backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);}
+    .toggle{display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;}
+    .switch{width:52px;height:30px;border-radius:999px;background:rgba(255,255,255,0.25);
+      position:relative;border:1px solid rgba(0,0,0,0.2); transition: background .2s ease;}
+    .thumb{width:26px;height:26px;border-radius:50%; background:white; position:absolute; top:1px; left:1px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25); transition:left .2s ease;}
+    body.light .switch{background:rgba(0,122,255,0.25)}
+    body.light .thumb{left:25px}
+    main{display:grid; grid-template-columns: 1fr; gap:24px; padding:24px}
+    @media(min-width:900px){ main{grid-template-columns: 360px 1fr;} }
+    .card{background: var(--card); border:1px solid rgba(255,255,255,0.12); border-radius: var(--radius);
+      padding: 22px; box-shadow: var(--shadow); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);}
+    /* HERO avatar */
+    
+    /* Apple-style blue glow for avatar */
+    .avatar{
+      position:relative;
+      width:120px; height:120px;
+      border-radius:26px; overflow:hidden;
+      background:rgba(255,255,255,0.6);
+      box-shadow:
+        0 0 12px rgba(0,122,255,0.4),
+        0 0 24px rgba(0,122,255,0.3),
+        0 0 48px rgba(0,122,255,0.2);
+      border:2px solid rgba(0,122,255,0.6);
+      backdrop-filter:blur(8px) saturate(160%);
+      -webkit-backdrop-filter:blur(8px) saturate(160%);
+      transition:box-shadow .5s ease;
+    }
+    .avatar:hover{
+      box-shadow:
+        0 0 20px rgba(0,122,255,0.6),
+        0 0 40px rgba(0,122,255,0.4),
+        0 0 60px rgba(0,122,255,0.25);
+    }
+
+    .avatar-rotator{position:relative; width:120px; height:120px; border-radius:26px; overflow:hidden;}
+    .avatar-rotator img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: opacity .45s ease}
+    .avatar-rotator img.hidden{opacity:0}
+    .hero h1{margin:16px 0 6px; font-size:28px}
+    .hero p{margin:6px 0; color: var(--muted)}
+    .badges{display:flex;flex-wrap:wrap; gap:8px; margin-top:12px}
+    .badge{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.1); font-size:13px;}
+    .section-title{display:flex; align-items:center; justify-content:space-between; margin:0 0 12px}
+    .section-title h2{margin:0; font-size:20px}
+    .list{display:flex; flex-direction:column; gap:14px}
+    .list-item{display:flex; gap:12px}
+    .list-item .dot{width:10px;height:10px;border-radius:50%;background:var(--tint);margin-top:8px}
+    .kv{display:grid; grid-template-columns: 110px 1fr; gap:6px 12px; margin-top:12px}
+    .kv div{padding:6px 0; border-bottom: 1px dashed rgba(255,255,255,0.12)}
+    .projects{display:grid; grid-template-columns:1fr; gap:16px}
+    @media(min-width:700px){ .projects{grid-template-columns: repeat(2, 1fr);} }
+    @media(min-width:1100px){ .projects{grid-template-columns: repeat(3, 1fr);} }
+    .project{display:flex; flex-direction:column; gap:10px; border-radius:16px; padding:16px;
+      border:1px solid rgba(255,255,255,0.12); background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.06));}
+    .project h3{margin:0 0 4px; font-size:16px}
+    .project p{margin:0; color: var(--muted); font-size:14px}
+    .tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px}
+    .tag{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.1)}
+    .cta{display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px;
+      background: linear-gradient(180deg, var(--tint), #34c7f3); color:white; text-decoration:none; font-weight:600;
+      box-shadow: 0 10px 24px rgba(0,122,255,0.35); border:0;}
+    footer{padding:24px; text-align:center; color:var(--muted)}
+    a{color:var(--tint)}
+  
+    /* Education layout tweaks */
+    #vzdelani .list{gap:18px}
+    #vzdelani .list-item{align-items:flex-start; padding:6px 0}
+    #vzdelani .list-item .dot{width:10px;height:10px;border-radius:50%;align-self: center;background:var(--tint);margin-top:6px}
+    .edu-title{font-weight:700; font-size:16px; line-height:1.25}
+    .edu-meta{color: var(--muted); font-size:14px; margin-top:2px; line-height:1.35}
+
+    /* Education one-line layout */
+    #vzdelani .list{gap:14px}
+    #vzdelani .list-item{display:flex; align-items:center; gap:10px; padding:6px 0; white-space:nowrap}
+    #vzdelani .dot{width:8px;height:8px;border-radius:50%;background:var(--tint); flex:0 0 auto}
+    .edu-row{display:flex; align-items:baseline; gap:10px; white-space:nowrap}
+    .edu-school{font-weight:700; font-size:16px}
+    .edu-years{color: var(--muted); font-size:15px}
+    .edu-obor{color: var(--muted); font-size:15px}
+    /* Allow wrap on very small screens */
+    @media (max-width: 560px){
+      #vzdelani .list-item, .edu-row{white-space:normal}
+    }
+
+    /* Education full-width across grid */
+    #vzdelani{ grid-column: 1 / -1; }
+    /* Single-line look with natural wrapping when needed */
+    #vzdelani .list{gap:18px}
+    #vzdelani .list-item{display:flex; align-items:center; gap:12px; padding:8px 0}
+    #vzdelani .dot{width:10px;height:10px;border-radius:50%;background:var(--tint); flex:0 0 auto; margin-top:2px}
+    .edu-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+    .edu-school{font-weight:700; font-size:17px}
+    .edu-obor, .edu-years{color: var(--muted); font-size:15px}
+
+  
+    /* Projects section full width and card styling */
+    #projekty{ grid-column: 1 / -1; }
+    #projekty .projects{display:grid; grid-template-columns:1fr; gap:20px}
+    #projekty .proj-card{
+      background: var(--card);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      padding:20px 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter:var(--blur);
+      -webkit-backdrop-filter:var(--blur);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    #projekty .proj-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 8px 30px rgba(0,0,0,0.25);
+    }
+    #projekty .proj-card h3{margin:0 0 6px; font-size:18px}
+    #projekty .proj-card p{margin:0 0 8px; color:var(--muted)}
+    #projekty .proj-card a{color:var(--tint); text-decoration:none; font-weight:600}
+
+  
+    #vzdelani{ margin-bottom: 40px; }
+  
+    /* Canonical Education styling */
+    #vzdelani{ grid-column: 1 / -1; margin-bottom: 40px; }
+    #vzdelani .list{gap:16px}
+    #vzdelani .list-item{display:flex; align-items:center; gap:10px}
+    #vzdelani .dot{width:10px;height:10px;border-radius:50%;background:var(--tint)}
+    #vzdelani .edu-line{display:flex; gap:12px; align-items:baseline; flex-wrap:wrap}
+    #vzdelani .edu-school{font-weight:700}
+    #vzdelani .edu-years, #vzdelani .edu-obor{color:var(--muted)}
+
+  
+    .cta.green{
+      background: linear-gradient(180deg, #34c759, #28cd41);
+      box-shadow: 0 10px 24px rgba(52,199,89,0.35);
+      color: white !important;
+    }
+  
+    /* iOS-style theme switch */
+    .ios-toggle{display:flex; align-items:center; gap:10px}
+    #themeSwitch{position:absolute; opacity:0; width:0; height:0}
+    .ios-switch{
+      width:52px; height:30px; border-radius:999px; position:relative; display:inline-block;
+      background:rgba(255,255,255,0.25); border:1px solid rgba(0,0,0,0.15);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .ios-switch .knob{
+      position:absolute; top:1px; left:1px; width:26px; height:26px; border-radius:50%;
+      background:#fff; box-shadow: 0 3px 8px rgba(0,0,0,0.25), inset 0 -1px 1px rgba(0,0,0,0.08);
+      transition:left .25s ease;
+    }
+    #themeSwitch:checked + .ios-switch{
+      background: rgba(0,122,255,0.35);
+      border-color: rgba(0,122,255,0.45);
+      box-shadow: inset 0 2px 10px rgba(0,122,255,0.35);
+    }
+    #themeSwitch:checked + .ios-switch .knob{ left:25px; }
+
+  
+    /* iOS-style theme switch */
+    .ios-toggle{display:flex; align-items:center; gap:10px}
+    #themeSwitch{position:absolute; opacity:0; width:0; height:0}
+    .ios-switch{
+      width:52px; height:30px; border-radius:999px; position:relative; display:inline-block;
+      background:rgba(255,255,255,0.25); border:1px solid rgba(0,0,0,0.15);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .ios-switch .knob{
+      position:absolute; top:1px; left:1px; width:26px; height:26px; border-radius:50%;
+      background:#fff; box-shadow: 0 3px 8px rgba(0,0,0,0.25), inset 0 -1px 1px rgba(0,0,0,0.08);
+      transition:left .25s ease;
+    }
+    #themeSwitch:checked + .ios-switch{
+      background: rgba(0,122,255,0.35);
+      border-color: rgba(0,122,255,0.45);
+      box-shadow: inset 0 2px 10px rgba(0,122,255,0.35);
+    }
+    #themeSwitch:checked + .ios-switch .knob{ left:25px; }
+
+    /* Fade animation on theme change */
+    body.theme-fade{ transition: background .35s ease, color .35s ease; }
+
+  
+    /* Place iOS switch left next to location text */
+    .statusbar{display:flex; justify-content:space-between; align-items:center}
+    .statusbar-left{display:flex; align-items:center; gap:8px}
+    .ios-switch{transform:scale(0.9); margin-left:4px;}
+
+  
+    .ios-icon{opacity:1!important; width:22px;height:22px;object-fit:contain;display:inline-block;vertical-align:middle;opacity:.95;margin:0 4px}
+    .statusbar-left{display:flex;align-items:center;gap:10px}
+  
+  /* v29 polish */
+  html{ scroll-behavior: smooth; }
+  /* glassy statusbar */
+  header .statusbar-wrap{
+    position: sticky; top: 10px; z-index: 50;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    padding: 6px 10px;
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  }
+  body:not(.light) header .statusbar-wrap{
+    background: rgba(20,20,25,0.35);
+    border-color: rgba(255,255,255,0.06);
+  }
+  /* micro-animations on cards */
+  .card{ opacity: 0; transform: translateY(12px); animation: fadeUp .6s ease forwards; }
+  .card:nth-of-type(1){ animation-delay: .05s }
+  .card:nth-of-type(2){ animation-delay: .12s }
+  .card:nth-of-type(3){ animation-delay: .18s }
+  .card:nth-of-type(4){ animation-delay: .24s }
+  @keyframes fadeUp{
+    to{ opacity:1; transform:none }
+  }
+  /* pulsing glow on switch when toggled */
+  .ios-switch:active .knob{ box-shadow: 0 0 12px rgba(0,122,255,.6); }
+  /* gradient transition for page background */
+  body, .bg{ transition: background .35s ease, background-image .35s ease; }
+  /* copy email helper */
+  .copy-link{ font-size: 13px; color: var(--muted); text-decoration: none; margin-left: 8px }
+  .copy-link.ok{ color: var(--tint); font-weight: 600 }
+
+  
+  /* Top nav tabs */
+  nav.tabs{display:flex; gap:10px; margin:14px 0 0; justify-content:center}
+  nav.tabs a{padding:10px 14px; border-radius:999px; background:var(--card);
+    border:1px solid rgba(255,255,255,0.15); text-decoration:none; color:inherit;
+    box-shadow: var(--shadow); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease}
+  nav.tabs a:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.18)}
+  nav.tabs a.active{background: rgba(0,122,255,.15); border-color: rgba(0,122,255,.35);}
+  main{margin-top:10px}
+
+  </style>
+</head>
+<body class="light">
+  <header>
+    <div class="statusbar statusbar-wrap">
+      <div class="statusbar-left">
+        <span class="pill">📍 Čejč • Brno • Ostrava, Česká republika</span>
+        <img class="ios-icon theme-icon" alt="Tmavý režim" 
+             src="assets/měsíc_černý.png" 
+             data-light="assets/měsíc_černý.png" 
+             data-dark="assets/měsíc_bílí.png" aria-hidden="true">
+        <input type="checkbox" id="themeSwitch" aria-label="Přepnout motiv">
+        <label for="themeSwitch" class="ios-switch"><span class="knob"></span></label>
+        <img class="ios-icon theme-icon" alt="Světlý režim" 
+             src="assets/slunce_černý.png" 
+             data-light="assets/slunce_černý.png" 
+             data-dark="assets/slunce_bílí.png" aria-hidden="true">
+</div>
+    </div>
+      
+    </div>
+  </header>
+    
+    <nav class="tabs">
+      <a href="index.html" class="active">Úvod</a>
+      <a href="blog.html">Moje fotky</a>
+      <a href="skola.html">Škola</a>
+    </nav>
+    
+
+  <div class="container">
+    <main>
+      <!-- Left column: HERO -->
+      <section class="card hero">
+        <div class="avatar">
+          <div class="avatar-rotator" id="avatarRotator" aria-live="polite">
+            <img src="assets/memoji.png" alt="Memoji Davida" id="imgMemoji">
+            <img src="assets/photo.png" alt="Profilová fotografie Davida" id="imgPhoto" class="hidden">
+          </div>
+        </div>
+        <h1>David Voznica</h1>
+        <p>Student Informatiky — VŠB-TUO (FEI) • řidič & tech nadšenec</p>
+        
+        <div class="kv" aria-label="Osobní údaje">
+          <div><strong>E-mail</strong></div><div><a href="mailto:voznicad@gmail.com">voznicad@gmail.com</a></div>
+          <div><strong>Telefon</strong></div><div><a href="tel:+420774142409">+420 774 142 409</a></div>
+          <div><strong>Instagram</strong></div><div><a href="https://instagram.com/david_voznica" target="_blank">@david_voznica</a></div>
+          
+        </div>
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap">
+          <a class="cta" href="#projekty">Moje projekty</a>
+          <a href="mailto:voznicad@gmail.com" class="cta green">Kontaktuj mě</a>
+        </div>
+      </section>
+
+      <!-- Right column: O MNĚ -->
+      <section class="card">
+        <div class="section-title">
+          <h2>O mně</h2>
+          <span class="pill">🧭 Cíl: čistý a funkční design</span>
+        </div>
+        <p>
+          Jsem student informatiky na VŠB-TUO (FEI) a dříve jsem studoval geodézii na           Baví mě moderní technologie, řízení auta a tvoření vizuálů ve stylu Apple iOS.
+        </p>
+        <p>Ve volném čase <strong>rád fotím</strong> – hlavně přírodu, auta a momenty ze života.</p>
+        <div class="osvc" style="margin-top:20px">
+          <h3 style="font-size:17px; font-weight:700; text-decoration:underline; margin-bottom:8px;">OSVČ:</h3>
+          <p><strong>David Voznica</strong><br>
+          IČO: 23175443<br>
+          Čejč 75, 696 14</p>
+
+          <h3 style="font-size:17px; font-weight:700; text-decoration:underline; margin:20px 0 8px;">Práce jako kurýr:</h3>
+          <p>Košík.cz (duben – září 2025)<br>
+          KFC rozvoz (červenec – září 2025)</p>
+        </div>
+
+      </section>
+
+      <!-- VZDĚLÁNÍ -->
+      
+
+      <!-- PROJEKTY -->
+      
+      
+<section class="card" id="vzdelani">
+        <div class="section-title">
+          <h2>Vzdělání</h2>
+          <span class="pill">🎓 školy & roky</span>
+        </div>
+        <div class="list">
+          <div class="list-item">
+            <div class="dot"></div>
+            <div class="edu-line">
+              <span class="edu-school">ZŠ Čejč</span>
+              <span class="edu-years">— 2012 – 2016</span>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="dot"></div>
+            <div class="edu-line">
+              <span class="edu-school">ZŠ Hovorany</span>
+              <span class="edu-years">— 2016 – 2021</span>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="dot"></div>
+            <div class="edu-line">
+              <span class="edu-school">SPŠ stavební Brno</span>
+              <span class="edu-obor">— obor Geodézie a katastr nemovitostí</span>
+              <span class="edu-years">— 2021 – 2025</span>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="dot"></div>
+            <div class="edu-line">
+              <span class="edu-school">VŠB – Technická univerzita Ostrava</span>
+              <span class="edu-obor">— FEI, Informatika</span>
+              <span class="edu-years">— 2025 – současnost</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
+
+      <!-- KONTAKT -->
+      
+    </main>
+
+    <footer>
+      © <span id="year"></span> David Voznica • Projekt do Základy informačních technologií • iOS-style
+    </footer>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+    
+    
+    // Theme toggle (iOS-style with fade) + OS auto-detect
+    (function(){
+      const switchEl = document.getElementById('themeSwitch');
+      const media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+      const saved = localStorage.getItem('theme'); // 'light' | 'dark' | null
+
+      function setTheme(light, persist){
+        document.body.classList.add('theme-fade');
+        document.body.classList.toggle('light', light);
+        if (switchEl) switchEl.checked = light;
+        if (persist) localStorage.setItem('theme', light ? 'light' : 'dark'); updateThemeIcons();
+        setTimeout(()=>document.body.classList.remove('theme-fade'), 400);
+      }
+
+      // Initial: saved preference wins; otherwise follow OS
+      if (saved === 'light' || saved === 'dark'){
+        setTheme(saved === 'light', false);
+      } else {
+        const light = media ? !media.matches : true; // if dark OS, use dark (no .light)
+        setTheme(light, false);
+      }
+
+      // Manual override via switch
+      if (switchEl){
+        switchEl.addEventListener('change', ()=>{
+          const light = !!switchEl.checked;
+          setTheme(light, true); // persist manual choice
+        });
+      }
+
+      // React to OS changes only if user has NOT made a manual choice
+      if (media && (saved !== 'light' && saved !== 'dark')){
+        media.addEventListener('change', (e)=>{
+          setTheme(!e.matches, false); updateThemeIcons();
+        });
+      }
+    })();
+
+    // Avatar rotation (Memoji <-> Photo) every 10 seconds with crossfade
+    (function(){
+      const memo = document.getElementById('imgMemoji');
+      const photo = document.getElementById('imgPhoto');
+      if(!memo || !photo) return;
+      let showMemoji = true;
+      setInterval(()=>{
+        showMemoji = !showMemoji;
+        memo.classList.toggle('hidden', !showMemoji);
+        photo.classList.toggle('hidden', showMemoji);
+      }, 10000);
+    })();
+  </script>
+
+<!-- theme-fix v28 -->
+<script>
+(function(){
+  const switchEl = document.getElementById('themeSwitch');
+  const media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  const KEY = 'theme'; // 'light' | 'dark' | null
+
+  function apply(light, persist){
+    document.body.classList.add('theme-fade');
+    document.body.classList.toggle('light', !!light);
+    if (switchEl) switchEl.checked = !!light;
+    if (persist) localStorage.setItem(KEY, light ? 'light' : 'dark');
+    // update icons
+    document.querySelectorAll('.theme-icon').forEach(img => {
+      const src = (light ? img.dataset.light : img.dataset.dark) || img.getAttribute('src');
+      if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
+    setTimeout(()=>document.body.classList.remove('theme-fade'), 300);
+  }
+
+  function init(){
+    const saved = localStorage.getItem(KEY); // user override?
+    if (saved === 'light' || saved === 'dark'){
+      apply(saved === 'light', false);
+    } else {
+      const light = media ? !media.matches : true; // if OS dark -> light=false
+      apply(light, false);
+    }
+  }
+
+  // Manual switch
+  if (switchEl){
+    switchEl.addEventListener('change', ()=> apply(switchEl.checked, true));
+  }
+
+  // React to OS changes only if no manual override
+  if (media){
+    media.addEventListener('change', e => {
+      const saved = localStorage.getItem(KEY);
+      if (saved !== 'light' && saved !== 'dark'){
+        apply(!e.matches, false);
+      }
+    });
+  }
+
+  // Run
+  init();
+})();
+</script>
+
+
+<script>
+  (function(){
+    const el = document.getElementById('copyEmail');
+    if(!el) return;
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      navigator.clipboard.writeText('voznicad@gmail.com').then(()=>{
+        el.textContent = 'Zkopírováno!';
+        el.classList.add('ok');
+        setTimeout(()=>{ el.textContent = 'Kopírovat'; el.classList.remove('ok'); }, 1800);
+      });
+    });
+  })();
+</script>
+
+
+<!-- v42 theme icon sync -->
+<script>
+(function(){
+  function syncIcons(){
+    const isLight = document.body.classList.contains('light');
+    document.querySelectorAll('.theme-icon').forEach(img => {
+      const wanted = isLight ? img.dataset.light : img.dataset.dark;
+      if (wanted && img.getAttribute('src') !== wanted){ img.setAttribute('src', wanted); }
+      img.style.opacity = '1';
+    });
+  }
+  document.addEventListener('DOMContentLoaded', syncIcons);
+  const sw = document.getElementById('themeSwitch');
+  if(sw) sw.addEventListener('change', syncIcons);
+  const mo = new MutationObserver(syncIcons);
+  mo.observe(document.body, {attributes:true, attributeFilter:['class']});
+  const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  mq && mq.addEventListener('change', syncIcons);
+  window.addEventListener('storage', syncIcons);
+  // immediate attempt
+  syncIcons();
+})();
+</script>
+
+<!-- v45 theme icon updater -->
+<script>
+(function(){
+  function updateIconsV45(){
+    const light = document.body.classList.contains('light');
+    document.querySelectorAll('.theme-icon').forEach(img=>{
+      const src = light ? img.dataset.light : img.dataset.dark;
+      if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
+      img.style.opacity = '1';
+    });
+  }
+  document.addEventListener('DOMContentLoaded', updateIconsV45);
+  const sw = document.getElementById('themeSwitch');
+  if (sw) sw.addEventListener('change', updateIconsV45);
+  const mo = new MutationObserver(updateIconsV45);
+  mo.observe(document.body, {attributes:true, attributeFilter:['class']});
+  window.updateIconsV45 = updateIconsV45;
+  // first paint
+  updateIconsV45();
+})();
+</script>
+
+</body>
+</html>
